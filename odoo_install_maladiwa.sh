@@ -91,6 +91,12 @@ echo -e "\n--- Installing Python 3 + pip3 --"
 sudo apt-get install python3 python3-pip
 sudo apt-get install git python3-cffi build-essential wget python3-dev python3-venv python3-wheel libxslt-dev libzip-dev libldap2-dev libsasl2-dev python3-setuptools node-less libpng-dev libjpeg-dev gdebi -y
 
+echo -e "\n---- Installing pysftp ----"
+sudo pip install pysftp
+
+echo -e "\n---- Installing  paramiko----"
+sudo pip install paramiko
+
 echo -e "\n---- Install python packages/requirements ----"
 sudo -H pip3 install -r https://github.com/odoo/odoo/raw/${OE_VERSION}/requirements.txt
 
@@ -99,11 +105,7 @@ sudo apt-get install nodejs npm -y
 sudo npm install -g rtlcss
 
 
-echo -e "\n---- Installing pysftp ----"
-sudo pip install pysftp
 
-echo -e "\n---- Installing  paramiko----"
-sudo pip install paramiko
 
 
 #--------------------------------------------------
@@ -189,7 +191,11 @@ if [ $OE_VERSION > "11.0" ];then
 else
     sudo su root -c "printf 'xmlrpc_port = ${OE_PORT}\n' >> /etc/${OE_CONFIG}.conf"
 fi
+sudo su root -c "printf 'proxy_mode = True"
+sudo su root -c "printf 'max_cron_threads = 1"
+sudo su root -c "printf 'workers = 2"
 sudo su root -c "printf 'logfile = /var/log/${OE_USER}/${OE_CONFIG}.log\n' >> /etc/${OE_CONFIG}.conf"
+
 
 if [ $IS_ENTERPRISE = "True" ]; then
     sudo su root -c "printf 'addons_path=${OE_HOME}/enterprise/addons,${OE_HOME_EXT}/addons\n' >> /etc/${OE_CONFIG}.conf"
